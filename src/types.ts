@@ -218,6 +218,7 @@ export interface ScenarioProfile {
     threads: string;
     gpu: string;
     overdraw: string;
+    power: string;
     conclusion: string;
   };
   findings: Findings;

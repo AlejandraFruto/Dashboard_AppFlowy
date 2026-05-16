@@ -196,6 +196,7 @@ const pendingScenario = (
     threads: "Not available for this scenario yet.",
     gpu: "Not available for this scenario yet.",
     overdraw: "Not available for this scenario yet.",
+    power: "Not available for this scenario yet.",
     conclusion: "This scenario is ready to receive structured DevTools and developer-mode data.",
   },
   findings: {
@@ -226,6 +227,7 @@ const scenario1: ScenarioProfile = {
     "Flutter Inspector screenshot",
     "Android developer option: Profile GPU rendering",
     "Android developer option: Debug GPU overdraw",
+    "ADB dumpsys batterystats",
   ],
   sourceFiles: [
     "dart_devtools_2026-05-16_09_40_38.944.json",
@@ -233,9 +235,10 @@ const scenario1: ScenarioProfile = {
     "scenario-1-devtools-memory.png",
     "scenario-1-devtools-performance.png",
     "scenario-1-widget-tree.png",
+    "batterystats_scenario_1.txt",
   ],
   measurementContext:
-    "Scenario 1 is based only on Flutter DevTools exports/screenshots from the local profile build and visual evidence captured directly on the Android device through developer options.",
+    "Scenario 1 is based on Flutter DevTools exports/screenshots from the local profile build, visual evidence captured directly on the Android device through developer options, and ADB batterystats for power consumption.",
   metrics: {
     memory: {
       ...emptyMemory,
@@ -280,7 +283,22 @@ const scenario1: ScenarioProfile = {
         "The image was attached in the conversation; save it as public/evidence/scenario-1-overdraw.png if it should render in the evidence gallery.",
       ],
     },
-    power: emptyPower,
+    power: {
+      estimatedBatteryCapacityMah: measured(4565, "mAh", "ADB batterystats"),
+      typicalBatteryCapacityMah: measured(4700, "mAh", "ADB batterystats"),
+      totalRunTime: "57s 384ms",
+      dischargeMah: measured(0, "mAh", "ADB batterystats"),
+      computedDrainMah: measured(0, "mAh", "ADB batterystats"),
+      actualDrainMah: measured(0, "mAh", "ADB batterystats"),
+      appEstimatedMah: measured(1.8, "mAh", "ADB batterystats UID u0a367"),
+      appCpuMah: measured(0.377, "mAh", "ADB batterystats UID u0a367"),
+      appWifiMah: measured(0.00349, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundMah: measured(0.28, "mAh", "ADB batterystats UID u0a367"),
+      appBackgroundMah: measured(0.1, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundTime: "41s 491ms",
+      screenOnTime: "51s 455ms",
+      canTrustPowerProfile: true,
+    },
     devTools: {
       available: true,
       devToolsVersion: "2.40.3",
@@ -388,8 +406,10 @@ const scenario1: ScenarioProfile = {
       "The two captured Flutter frames are both above the 8.33 ms frame budget of a 120 Hz device, but below the 16.67 ms 60 Hz budget. Raster time is the key pressure point, with a maximum of 9.843 ms.",
     overdraw:
       "Developer-mode overdraw evidence suggests low-to-moderate overdraw in repeated rows, navigation, and floating controls. The lack of broad red regions suggests no severe full-screen overdraw in the startup view.",
+    power:
+      "ADB batterystats reports a short 57.4 second capture with the screen on for 51.5 seconds and a trusted power profile. AppFlowy appears under UID u0a367, with 1.80 mAh attributed to the app. Most attributed app energy comes from screen contribution at 1.42 mAh, while CPU accounts for 0.377 mAh and WiFi is minimal at 0.00349 mAh. The device-level discharge is rounded to 0 mAh because the scenario window is short, so UID-level modeled energy is more useful than battery percentage drain.",
     conclusion:
-      "Scenario 1 is usable and stable from the DevTools perspective, with modest Dart heap usage and a small frame sample. The main limitation is that the capture is short, so the startup conclusion should be treated as a first observation rather than a full timing study.",
+      "Scenario 1 is usable and stable from the DevTools perspective, with modest Dart heap usage and a small frame sample. Power evidence shows low absolute modeled consumption over the short startup window, dominated by screen-on attribution rather than CPU or network. The main limitation is that the capture is short, so the startup conclusion should be treated as a first observation rather than a full timing study.",
   },
   findings: {
     strengths: [
@@ -432,6 +452,7 @@ const scenario2: ScenarioProfile = {
     "Flutter Inspector screenshot",
     "Android developer option: Profile GPU rendering",
     "Android developer option: Debug GPU overdraw",
+    "ADB dumpsys batterystats",
   ],
   sourceFiles: [
     "dart_devtools_2026-05-16_12_15_57.530.csv",
@@ -442,9 +463,13 @@ const scenario2: ScenarioProfile = {
     "scenario-2-cpu-call-tree.png",
     "scenario-2-cpu-bottom-up.png",
     "scenario-2-widget-tree.png",
+    "batterystats_scenario_2.txt",
+    "batterystats_scenario_2_checkin.csv",
+    "battery_state_scenario_2.txt",
+    "package_scenario_2.txt",
   ],
   measurementContext:
-    "Scenario 2 is based only on Flutter DevTools exports/screenshots from the local profile build and visual evidence captured directly on the Android device through developer options.",
+    "Scenario 2 is based on Flutter DevTools exports/screenshots from the local profile build, visual evidence captured directly on the Android device through developer options, and ADB batterystats for power consumption.",
   metrics: {
     memory: {
       ...emptyMemory,
@@ -490,7 +515,22 @@ const scenario2: ScenarioProfile = {
         "The overdraw screenshot was attached in the conversation but is not yet available as a local report asset.",
       ],
     },
-    power: emptyPower,
+    power: {
+      estimatedBatteryCapacityMah: measured(4565, "mAh", "ADB batterystats"),
+      typicalBatteryCapacityMah: measured(4700, "mAh", "ADB batterystats"),
+      totalRunTime: "26s 942ms",
+      dischargeMah: measured(0, "mAh", "ADB batterystats"),
+      computedDrainMah: measured(0, "mAh", "ADB batterystats"),
+      actualDrainMah: measured(0, "mAh", "ADB batterystats"),
+      appEstimatedMah: measured(1.41, "mAh", "ADB batterystats UID u0a367"),
+      appCpuMah: measured(0.565, "mAh", "ADB batterystats UID u0a367"),
+      appWifiMah: measured(0.0037, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundMah: measured(0.514, "mAh", "ADB batterystats UID u0a367"),
+      appBackgroundMah: measured(0.0536, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundTime: "24s 39ms",
+      screenOnTime: "26s 942ms",
+      canTrustPowerProfile: true,
+    },
     devTools: {
       available: true,
       devToolsVersion: "2.40.3",
@@ -632,8 +672,10 @@ const scenario2: ScenarioProfile = {
       "The Performance export contains 340 frames on a 120 Hz display. Average frame time is 8.485 ms, just above the 8.33 ms 120 Hz budget. Most frames remain below 16.67 ms, but 14 frames exceed the 60 Hz budget and 91 frames exceed the 120 Hz budget. The worst frame reaches 61.286 ms, with raster work peaking at 43.538 ms.",
     overdraw:
       "The developer-mode overdraw screenshot shows low-to-moderate overdraw concentrated around repeated list rows, top tabs, and bottom navigation. This is consistent with a navigation/list screen and does not show evidence of severe full-screen overdraw.",
+    power:
+      "ADB batterystats reports a 26.9 second workspace navigation capture with the screen on for the full interval and a trusted power profile. AppFlowy appears under UID u0a367, with 1.41 mAh attributed to the app. The largest AppFlowy components are screen attribution at 0.844 mAh and CPU at 0.565 mAh, while WiFi is minimal at 0.00370 mAh. Device-level discharge is rounded to 0 mAh because the capture window is short, so UID-level modeled energy is the useful comparison point.",
     conclusion:
-      "Scenario 2 is more demanding than startup because navigation produces a longer stream of frame work, layout, paint, and raster activity. Memory remains controlled in the Dart heap, but frame timing shows occasional spikes and a meaningful number of frames above the 120 Hz budget.",
+      "Scenario 2 is more demanding than startup because navigation produces a longer stream of frame work, layout, paint, and raster activity. Memory remains controlled in the Dart heap, but frame timing shows occasional spikes and a meaningful number of frames above the 120 Hz budget. Power use remains low in absolute terms during the short capture, with most app energy tied to the visible screen and CPU work.",
   },
   findings: {
     strengths: [
@@ -652,7 +694,7 @@ const scenario2: ScenarioProfile = {
       "Only DevTools CSV/JSON/screenshots and developer-mode visual evidence are used.",
       "Numeric Android thread states, native heap, graphics heap, activities, views, and WebViews are not available in the accepted DevTools/developer-mode evidence.",
       "GPU overlay and overdraw phone screenshots are interpreted from the chat attachments but are not yet saved as local report image assets.",
-      "Battery behavior is not available in the accepted data sources.",
+      "Power evidence comes from a short ADB batterystats window, so percentage-level battery discharge is rounded to 0 mAh.",
     ],
   },
 };
@@ -679,6 +721,7 @@ const scenario3: ScenarioProfile = {
     "Flutter Inspector screenshot",
     "Android developer option: Profile GPU rendering",
     "Android developer option: Debug GPU overdraw",
+    "ADB dumpsys batterystats",
   ],
   sourceFiles: [
     "dart_devtools_2026-05-16_14_27_37.477.csv",
@@ -690,9 +733,13 @@ const scenario3: ScenarioProfile = {
     "scenario-3-cpu-call-tree.png",
     "scenario-3-cpu-bottom-up.png",
     "scenario-3-widget-tree.png",
+    "batterystats_scenario_3.txt",
+    "batterystats_scenario_3_checkin.csv",
+    "battery_state_scenario_3.txt",
+    "package_scenario_3.txt",
   ],
   measurementContext:
-    "Scenario 3 is based only on Flutter DevTools exports/screenshots from the local profile build and visual evidence captured directly on the Android device through developer options.",
+    "Scenario 3 is based on Flutter DevTools exports/screenshots from the local profile build, visual evidence captured directly on the Android device through developer options, and ADB batterystats for power consumption.",
   metrics: {
     memory: {
       ...emptyMemory,
@@ -738,7 +785,22 @@ const scenario3: ScenarioProfile = {
         "The phone overdraw image was attached in the conversation; save it as public/evidence/scenario-3-overdraw.png if it should render in the evidence gallery.",
       ],
     },
-    power: emptyPower,
+    power: {
+      estimatedBatteryCapacityMah: measured(4565, "mAh", "ADB batterystats"),
+      typicalBatteryCapacityMah: measured(4700, "mAh", "ADB batterystats"),
+      totalRunTime: "1m 9s 700ms",
+      dischargeMah: measured(0, "mAh", "ADB batterystats"),
+      computedDrainMah: measured(0, "mAh", "ADB batterystats"),
+      actualDrainMah: measured(0, "mAh", "ADB batterystats"),
+      appEstimatedMah: measured(0.634, "mAh", "ADB batterystats UID u0a367"),
+      appCpuMah: measured(0.62, "mAh", "ADB batterystats UID u0a367"),
+      appWifiMah: measured(0.0134, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundMah: measured(0.369, "mAh", "ADB batterystats UID u0a367"),
+      appBackgroundMah: measured(0.264, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundTime: "40s 389ms",
+      screenOnTime: "59s 758ms",
+      canTrustPowerProfile: true,
+    },
     devTools: {
       available: true,
       devToolsVersion: "2.40.3",
@@ -881,8 +943,10 @@ const scenario3: ScenarioProfile = {
       "The Performance export contains 574 frames on a 120 Hz display. Average frame time is 9.174 ms, above the 8.33 ms 120 Hz budget. P95 frame time is 17.429 ms and 31 frames exceed the 16.67 ms 60 Hz threshold. The worst frame reaches 36.523 ms, with raster time peaking at 28.482 ms.",
     overdraw:
       "The developer-mode overdraw evidence shows moderate green overdraw around the title, text lines, and a large left-side layout region. This is not severe full-screen overdraw, but it is more visible than a mostly idle screen because text editing introduces focused controls, document layout, and repeated text surfaces.",
+    power:
+      "ADB batterystats reports a 1 minute 9.7 second document editing capture, with the screen on for 59.8 seconds and a trusted power profile. AppFlowy appears under UID u0a367, with 0.634 mAh attributed to the app. Unlike startup and navigation, the app attribution is almost entirely CPU and WiFi: CPU accounts for 0.620 mAh and WiFi for 0.0134 mAh, while no screen component is listed in the UID breakdown. This matches the DevTools evidence where active editing creates sustained CPU, microtask, receive-port, and rendering work.",
     conclusion:
-      "Scenario 3 is the most interactive scenario in the current dataset. Dart heap remains moderate at 45.2 MB, but frame timing and CPU evidence show higher pressure from editing, input, microtasks, and rendering. The main improvement area is smoothness under active typing and document updates, especially on a 120 Hz device.",
+      "Scenario 3 is the most interactive scenario in the current dataset. Dart heap remains moderate at 45.2 MB, but frame timing and CPU evidence show higher pressure from editing, input, microtasks, and rendering. The power trace reinforces that interpretation because the AppFlowy UID energy is dominated by CPU work. The main improvement area is smoothness and CPU efficiency under active typing and document updates, especially on a 120 Hz device.",
   },
   findings: {
     strengths: [
@@ -903,7 +967,7 @@ const scenario3: ScenarioProfile = {
       "RSS and allocated memory are approximate values derived from the Scenario 2 RSS-to-Dart-heap ratio and the observed Dart heap for this scenario.",
       "Numeric Android thread states, native heap, graphics heap, activities, views, and WebViews are not available in the accepted evidence set.",
       "GPU overlay and overdraw phone screenshots are interpreted from the chat attachments but are not yet saved as local report image assets.",
-      "Battery behavior is not available in the accepted data sources.",
+      "Power evidence comes from a short ADB batterystats window, so percentage-level battery discharge is rounded to 0 mAh.",
     ],
   },
 };
@@ -930,6 +994,7 @@ const scenario4: ScenarioProfile = {
     "Flutter Inspector screenshot",
     "Android developer option: Profile GPU rendering",
     "Android developer option: Debug GPU overdraw",
+    "ADB dumpsys batterystats",
   ],
   sourceFiles: [
     "dart_devtools_2026-05-16_15_16_03.551.csv",
@@ -940,9 +1005,13 @@ const scenario4: ScenarioProfile = {
     "scenario-4-cpu-call-tree.png",
     "scenario-4-cpu-bottom-up.png",
     "scenario-4-widget-tree.png",
+    "batterystats_scenario_4.txt",
+    "batterystats_scenario_4_checkin.csv",
+    "battery_state_scenario_4.txt",
+    "package_scenario_4.txt",
   ],
   measurementContext:
-    "Scenario 4 is based only on Flutter DevTools exports/screenshots from the local profile build and visual evidence captured directly on the Android device through developer options.",
+    "Scenario 4 is based on Flutter DevTools exports/screenshots from the local profile build, visual evidence captured directly on the Android device through developer options, and ADB batterystats for power consumption.",
   metrics: {
     memory: {
       ...emptyMemory,
@@ -988,7 +1057,22 @@ const scenario4: ScenarioProfile = {
         "The phone overdraw image was attached in the conversation; save it as public/evidence/scenario-4-overdraw.png if it should render in the evidence gallery.",
       ],
     },
-    power: emptyPower,
+    power: {
+      estimatedBatteryCapacityMah: measured(4565, "mAh", "ADB batterystats"),
+      typicalBatteryCapacityMah: measured(4700, "mAh", "ADB batterystats"),
+      totalRunTime: "1m 4s 115ms",
+      dischargeMah: measured(0, "mAh", "ADB batterystats"),
+      computedDrainMah: measured(0, "mAh", "ADB batterystats"),
+      actualDrainMah: measured(0, "mAh", "ADB batterystats"),
+      appEstimatedMah: measured(2.52, "mAh", "ADB batterystats UID u0a367"),
+      appCpuMah: measured(1.12, "mAh", "ADB batterystats UID u0a367"),
+      appWifiMah: measured(0.0128, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundMah: measured(0.709, "mAh", "ADB batterystats UID u0a367"),
+      appBackgroundMah: measured(0.426, "mAh", "ADB batterystats UID u0a367"),
+      appForegroundTime: "39s 437ms",
+      screenOnTime: "1m 4s 115ms",
+      canTrustPowerProfile: true,
+    },
     devTools: {
       available: true,
       devToolsVersion: "2.40.3",
@@ -1130,8 +1214,10 @@ const scenario4: ScenarioProfile = {
       "The Performance export contains 325 frames on a 120 Hz display. Average frame time is 8.080 ms, slightly under the 8.33 ms 120 Hz budget, but 106 frames exceed that budget and 19 exceed the 16.67 ms 60 Hz threshold. The worst frame reaches 35.365 ms, with raster time peaking at 20.679 ms.",
     overdraw:
       "Developer-mode overdraw evidence suggests moderate-to-high overdraw during the page creation modal state. The dimmed workspace background plus bottom sheet introduces layered surfaces, and repeated rows/tabs remain visible beneath the overlay.",
+    power:
+      "ADB batterystats reports a 1 minute 4.1 second page creation capture with the screen on for the full interval and a trusted power profile. AppFlowy appears under UID u0a367, with 2.52 mAh attributed to the app, the highest app-level power value among the four scenarios. The UID breakdown shows 1.38 mAh from screen attribution, 1.12 mAh from CPU, and 0.0128 mAh from WiFi. This aligns with the bottom-sheet flow, where the app keeps the workspace visible underneath a modal surface while also doing page creation and UI refresh work.",
     conclusion:
-      "Scenario 4 shows that page creation is generally controlled in Dart heap usage, but the bottom-sheet transition and page-list update introduce frame spikes and visible layered overdraw. Compared with document editing, the capture has lower average frame time but still contains slow frames that are relevant for 120 Hz smoothness.",
+      "Scenario 4 shows that page creation is generally controlled in Dart heap usage, but the bottom-sheet transition and page-list update introduce frame spikes, layered overdraw, and the highest UID-level app energy in the current set. Compared with document editing, the capture has lower average frame time but still contains slow frames that are relevant for 120 Hz smoothness.",
   },
   findings: {
     strengths: [
@@ -1152,7 +1238,7 @@ const scenario4: ScenarioProfile = {
       "RSS and allocated memory are approximate values derived from Scenario 2 because Scenario 4 has the same Dart heap size in the accepted memory evidence.",
       "Numeric Android thread states, native heap, graphics heap, activities, views, and WebViews are not available in the accepted evidence set.",
       "GPU overlay, overdraw, and Memory screenshot images are interpreted from the chat attachments but are not yet saved as local report image assets.",
-      "Battery behavior is not available in the accepted data sources.",
+      "Power evidence comes from a short ADB batterystats window, so percentage-level battery discharge is rounded to 0 mAh.",
     ],
   },
 };
@@ -1167,4 +1253,4 @@ export const scenarios: ScenarioProfile[] = [
 export const completedScenarios = scenarios.filter((scenario) => scenario.status === "complete");
 
 export const appMeasurementNote =
-  "This restored report uses only Flutter DevTools CSV/JSON exports, DevTools screenshots, Flutter Inspector screenshots, and Android developer-mode visual evidence captured directly on the phone. Unavailable metrics are marked as not available.";
+  "This restored report uses Flutter DevTools CSV/JSON exports, DevTools screenshots, Flutter Inspector screenshots, Android developer-mode visual evidence captured directly on the phone, and ADB batterystats only for power consumption. Unavailable metrics are marked as not available.";

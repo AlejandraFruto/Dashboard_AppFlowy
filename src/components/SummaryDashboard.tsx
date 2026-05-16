@@ -307,6 +307,10 @@ const comparisonRows: Array<{ label: string; read: (scenario: ScenarioProfile) =
   { label: "Developer FPS overlay", read: (scenario) => formatOptional(scenario.metrics.devTools.developerFpsAverage, "FPS") },
   { label: "Developer CPU overlay", read: (scenario) => formatOptional(scenario.metrics.devTools.developerCpuPercent, "%") },
   { label: "Developer GPU overlay", read: (scenario) => formatOptional(scenario.metrics.devTools.developerGpuPercent, "%") },
+  { label: "App energy", read: (scenario) => formatMetricValue(scenario.metrics.power.appEstimatedMah, 3) },
+  { label: "CPU energy", read: (scenario) => formatMetricValue(scenario.metrics.power.appCpuMah, 3) },
+  { label: "WiFi energy", read: (scenario) => formatMetricValue(scenario.metrics.power.appWifiMah, 4) },
+  { label: "Screen-on time", read: (scenario) => scenario.metrics.power.screenOnTime },
 ];
 
 function measuredMetric(
@@ -326,6 +330,16 @@ function formatOptional(value: number | null | undefined, unit: string, digits =
     return formatNumber(value, 0);
   }
   return `${formatNumber(value, digits)} ${unit}`;
+}
+
+function formatMetricValue(metric: NumericMetric, digits = 1) {
+  if (metric.value === null || metric.value === undefined) {
+    return "Not available";
+  }
+  if (metric.unit === "count") {
+    return formatNumber(metric.value, 0);
+  }
+  return `${formatNumber(metric.value, digits)} ${metric.unit}`;
 }
 
 function formatMemoryValue(scenario: ScenarioProfile, metric: "rss" | "allocated") {

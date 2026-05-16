@@ -73,6 +73,13 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
     { name: "CPU %", value: metrics.devTools.developerCpuPercent },
     { name: "GPU %", value: metrics.devTools.developerGpuPercent },
   ].filter((item): item is { name: string; value: number } => item.value !== null && item.value !== undefined);
+  const powerBreakdown = [
+    { name: "Total app", value: metrics.power.appEstimatedMah.value },
+    { name: "CPU", value: metrics.power.appCpuMah.value },
+    { name: "WiFi", value: metrics.power.appWifiMah.value },
+    { name: "Foreground", value: metrics.power.appForegroundMah.value },
+    { name: "Background", value: metrics.power.appBackgroundMah.value },
+  ].filter((item): item is { name: string; value: number } => item.value !== null && item.value !== undefined);
   const hasDerivedMemory = scenario.order >= 3;
 
   return (
@@ -385,6 +392,56 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
             ) : (
               <p>No overdraw evidence has been added yet.</p>
             )}
+          </div>
+        </article>
+      </section>
+
+      <section className="section-grid">
+        <article className="panel">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Power analysis</p>
+              <h2>ADB batterystats energy model</h2>
+            </div>
+            <span className="pipeline-pill">{metrics.power.canTrustPowerProfile ? "Trusted power profile" : "Pending capture"}</span>
+          </div>
+          <div className="metric-grid metric-grid--four">
+            <MetricCard label="App energy" metric={metrics.power.appEstimatedMah} tone="green" />
+            <MetricCard label="CPU energy" metric={metrics.power.appCpuMah} tone="amber" />
+            <MetricCard label="WiFi energy" metric={metrics.power.appWifiMah} tone="teal" />
+            <MetricCard label="Battery capacity" metric={metrics.power.estimatedBatteryCapacityMah} tone="purple" />
+          </div>
+          <p className="interpretation">{scenario.interpretation.power}</p>
+        </article>
+
+        <article className="panel">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Power breakdown</p>
+              <h2>UID-level mAh attribution</h2>
+            </div>
+            <span className="pipeline-pill">{metrics.power.screenOnTime}</span>
+          </div>
+          <div className="chart-frame chart-frame--compact">
+            {powerBreakdown.length ? (
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={powerBreakdown}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="name" />
+                  <YAxis unit=" mAh" />
+                  <Tooltip formatter={(value) => [`${Number(value).toFixed(4)} mAh`, ""]} />
+                  <Bar dataKey="value" fill="#17633d" radius={[5, 5, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <EmptyChart />
+            )}
+          </div>
+          <div className="detail-list detail-list--columns">
+            <p>Total run time: {metrics.power.totalRunTime}</p>
+            <p>Screen on: {metrics.power.screenOnTime}</p>
+            <p>Foreground time: {metrics.power.appForegroundTime}</p>
+            <p>Device drain: {formatMetric(metrics.power.actualDrainMah, 3)}</p>
           </div>
         </article>
       </section>
