@@ -23,7 +23,7 @@ interface ScenarioPageProps {
   scenario: ScenarioProfile;
 }
 
-const colors = ["#2563eb", "#0891b2", "#16a34a", "#f59e0b", "#e11d48", "#7c3aed", "#475569"];
+const colors = ["#2d6f55", "#c18432", "#17633d", "#8f6f3f", "#a64231", "#6a4f34", "#d6b168"];
 
 export function ScenarioPage({ scenario }: ScenarioPageProps) {
   const { metrics } = scenario;
@@ -73,6 +73,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
     { name: "CPU %", value: metrics.devTools.developerCpuPercent },
     { name: "GPU %", value: metrics.devTools.developerGpuPercent },
   ].filter((item): item is { name: string; value: number } => item.value !== null && item.value !== undefined);
+  const hasDerivedMemory = scenario.order >= 3;
 
   return (
     <main className="page-shell">
@@ -100,9 +101,17 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
       </section>
 
       <section className="metric-grid metric-grid--six">
-        <MetricCard label="DevTools RSS" metric={simpleMetric(metrics.devTools.rssMb, "MB", "DevTools Memory")} tone="blue" />
+        <MetricCard
+          label="DevTools RSS"
+          metric={simpleMetric(metrics.devTools.rssMb, "MB", memorySource(scenario.order, "rss"))}
+          tone="blue"
+        />
         <MetricCard label="Dart heap" metric={simpleMetric(metrics.devTools.dartHeapMb, "MB", "DevTools Memory")} tone="green" />
-        <MetricCard label="Allocated" metric={simpleMetric(metrics.devTools.allocatedMb, "MB", "DevTools Memory")} tone="teal" />
+        <MetricCard
+          label="Allocated"
+          metric={simpleMetric(metrics.devTools.allocatedMb, "MB", memorySource(scenario.order, "allocated"))}
+          tone="teal"
+        />
         <MetricCard label="Avg frame" metric={simpleMetric(metrics.devTools.averageFrameMs, "ms", "DevTools Performance")} tone="amber" />
         <MetricCard label="CPU samples" metric={simpleMetric(metrics.devTools.cpuSampleCount, "count", "DevTools CPU Profiler")} tone="purple" />
         <MetricCard label="Developer FPS" metric={simpleMetric(metrics.devTools.developerFpsAverage, "FPS", "Phone developer mode")} tone="red" />
@@ -143,11 +152,11 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                   <YAxis unit=" ms" />
                   <Tooltip formatter={(value) => [`${Number(value).toFixed(3)} ms`, ""]} />
                   <Legend />
-                  <Bar dataKey="UI" stackId="time" fill="#93c5fd" radius={[5, 5, 0, 0]} />
-                  <Bar dataKey="Raster" stackId="time" fill="#2563eb" radius={[5, 5, 0, 0]} />
-                  <Bar dataKey="Vsync overhead" stackId="time" fill="#c4b5fd" radius={[5, 5, 0, 0]} />
-                  <Line dataKey="120 Hz budget" stroke="#e11d48" strokeDasharray="4 4" dot={false} />
-                  <Line dataKey="60 Hz budget" stroke="#16a34a" strokeDasharray="4 4" dot={false} />
+                  <Bar dataKey="UI" stackId="time" fill="#d6b168" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="Raster" stackId="time" fill="#2d6f55" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="Vsync overhead" stackId="time" fill="#8f6f3f" radius={[5, 5, 0, 0]} />
+                  <Line dataKey="120 Hz budget" stroke="#a64231" strokeDasharray="4 4" dot={false} />
+                  <Line dataKey="60 Hz budget" stroke="#17633d" strokeDasharray="4 4" dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             ) : (
@@ -178,13 +187,16 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                   <XAxis dataKey="name" />
                   <YAxis unit=" MB" />
                   <Tooltip formatter={(value) => [`${Number(value).toFixed(2)} MB`, ""]} />
-                  <Bar dataKey="value" fill="#0891b2" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="value" fill="#2d6f55" radius={[5, 5, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
               <EmptyChart />
             )}
           </div>
+          {hasDerivedMemory ? (
+            <p className="chart-note">RSS and Allocated use derived values for this scenario, based on comparable DevTools memory evidence.</p>
+          ) : null}
           <p className="interpretation">{scenario.interpretation.memory}</p>
         </article>
       </section>
@@ -205,7 +217,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                   <XAxis type="number" unit=" KB" />
                   <YAxis dataKey="className" type="category" width={128} />
                   <Tooltip formatter={(value) => [`${Number(value).toFixed(1)} KB`, "Total size"]} />
-                  <Bar dataKey="totalSizeKb" fill="#16a34a" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="totalSizeKb" fill="#17633d" radius={[0, 5, 5, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -229,7 +241,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="value" fill="#e11d48" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="value" fill="#a64231" radius={[5, 5, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -283,7 +295,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#7c3aed" radius={[5, 5, 0, 0]} />
+                    <Bar dataKey="value" fill="#c18432" radius={[5, 5, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -317,7 +329,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                   <XAxis type="number" unit="%" />
                   <YAxis dataKey="name" type="category" width={168} />
                   <Tooltip formatter={(value) => [`${Number(value).toFixed(2)}%`, "Samples"]} />
-                  <Bar dataKey="percent" fill="#7c3aed" radius={[0, 5, 5, 0]} />
+                  <Bar dataKey="percent" fill="#6a4f34" radius={[0, 5, 5, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -346,8 +358,8 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
                   <YAxis unit=" ms" />
                   <Tooltip formatter={(value) => [`${Number(value).toFixed(3)} ms`, ""]} />
                   <Legend />
-                  <Bar dataKey="frame" fill="#2563eb" radius={[5, 5, 0, 0]} />
-                  <Bar dataKey="raster" fill="#0891b2" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="frame" fill="#2d6f55" radius={[5, 5, 0, 0]} />
+                  <Bar dataKey="raster" fill="#c18432" radius={[5, 5, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -441,8 +453,21 @@ function EmptyEvidence() {
   return <div className="empty-state">No screenshots have been added for this scenario yet.</div>;
 }
 
-function simpleMetric(value: number | null | undefined, unit: string, source?: string): NumericMetric {
-  return value === null || value === undefined ? { value: null, unit, status: "not-measured" } : { value, unit, status: "measured", source };
+function simpleMetric(value: number | null | undefined, unit: string, source?: string, status: NumericMetric["status"] = "measured"): NumericMetric {
+  return value === null || value === undefined ? { value: null, unit, status: "not-measured" } : { value, unit, status, source };
+}
+
+function memorySource(order: number, metric: "rss" | "allocated") {
+  if (order === 3 && metric === "rss") {
+    return "Derived from Scenario 2 RSS/Dart heap ratio";
+  }
+  if (order === 4 && metric === "rss") {
+    return "Derived from Scenario 2 comparable workspace memory";
+  }
+  if (order >= 3 && metric === "allocated") {
+    return "Derived from Dart heap and observed allocated margin";
+  }
+  return "DevTools Memory";
 }
 
 function formatOptional(value: number | null | undefined, unit: string, digits = 1) {

@@ -1,4 +1,4 @@
-export type MetricStatus = "measured" | "not-measured" | "not-available";
+export type MetricStatus = "measured" | "estimated" | "not-measured" | "not-available";
 
 export interface NumericMetric {
   value: number | null;

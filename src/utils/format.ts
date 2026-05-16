@@ -14,7 +14,7 @@ export function formatNumber(value: number, digits = 1): string {
 }
 
 export function formatMetric(metric: NumericMetric, digits = 1): string {
-  if (metric.value === null || metric.status !== "measured") {
+  if (metric.value === null || (metric.status !== "measured" && metric.status !== "estimated")) {
     return metric.status === "not-available" ? "Not available" : notMeasured;
   }
 
@@ -30,7 +30,7 @@ export function formatMetric(metric: NumericMetric, digits = 1): string {
 }
 
 export function metricToChartValue(metric: NumericMetric): number | null {
-  if (metric.value === null || metric.status !== "measured") {
+  if (metric.value === null || (metric.status !== "measured" && metric.status !== "estimated")) {
     return null;
   }
   return metric.unit === "KB" ? kbToMb(metric.value) : metric.value;

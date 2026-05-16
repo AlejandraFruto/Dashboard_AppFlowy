@@ -24,7 +24,7 @@ import type { NumericMetric, ScenarioProfile } from "../types";
 import { formatNumber } from "../utils/format";
 import { MetricCard } from "./MetricCard";
 
-const chartColors = ["#2563eb", "#0891b2", "#16a34a", "#f59e0b", "#e11d48", "#7c3aed", "#475569"];
+const chartColors = ["#2d6f55", "#c18432", "#17633d", "#8f6f3f", "#a64231", "#6a4f34", "#d6b168"];
 
 export function SummaryDashboard() {
   const complete = scenarios.filter((scenario) => scenario.status === "complete");
@@ -73,20 +73,24 @@ export function SummaryDashboard() {
     <main className="page-shell">
       <section className="hero-panel hero-panel--dashboard">
         <div>
-          <p className="eyebrow">Flutter DevTools profiling report</p>
-          <h1>AppFlowy performance dashboard</h1>
+          <p className="eyebrow">Restored report chamber</p>
+          <h1>Realm map of AppFlowy performance</h1>
           <p>{appMeasurementNote}</p>
         </div>
         <div className="hero-scorecard">
-          <span>Evidence stack</span>
+          <span>Recovered parts</span>
           <strong>{scenarios.length}</strong>
-          <small>Scenarios built from DevTools exports and phone screenshots</small>
+          <small>Scenarios restored from DevTools exports and phone screenshots</small>
         </div>
       </section>
 
       {latest ? (
         <section className="metric-grid metric-grid--six">
-          <MetricCard label="Latest RSS" metric={measuredMetric(latest.metrics.devTools.rssMb, "MB", "DevTools Memory")} tone="blue" />
+          <MetricCard
+            label="Latest RSS"
+            metric={measuredMetric(latest.metrics.devTools.rssMb, "MB", memorySource(latest, "rss"))}
+            tone="blue"
+          />
           <MetricCard label="Dart heap" metric={measuredMetric(latest.metrics.devTools.dartHeapMb, "MB", "DevTools Memory")} tone="green" />
           <MetricCard label="Avg frame" metric={measuredMetric(latest.metrics.devTools.averageFrameMs, "ms", "DevTools Performance")} tone="teal" />
           <MetricCard label="P95 frame" metric={measuredMetric(latest.metrics.devTools.p95FrameMs, "ms", "DevTools Performance")} tone="amber" />
@@ -111,12 +115,13 @@ export function SummaryDashboard() {
                 <YAxis unit=" MB" />
                 <Tooltip formatter={(value) => [`${Number(value).toFixed(1)} MB`, ""]} />
                 <Legend />
-                <Bar dataKey="RSS" fill="#2563eb" radius={[5, 5, 0, 0]} />
-                <Bar dataKey="Allocated" fill="#0891b2" radius={[5, 5, 0, 0]} />
-                <Bar dataKey="Dart heap" fill="#16a34a" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="RSS" fill="#2d6f55" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="Allocated" fill="#c18432" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="Dart heap" fill="#17633d" radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
+          <p className="chart-note">Scenario 3 and Scenario 4 RSS/Allocated values use derived memory values based on comparable DevTools evidence.</p>
         </article>
 
         <article className="panel panel--blue">
@@ -152,9 +157,9 @@ export function SummaryDashboard() {
                 <YAxis unit=" ms" />
                 <Tooltip formatter={(value) => [`${Number(value).toFixed(3)} ms`, ""]} />
                 <Legend />
-                <Area type="monotone" dataKey="Average frame" stroke="#0891b2" fill="#cffafe" />
-                <Area type="monotone" dataKey="P95 frame" stroke="#f59e0b" fill="#fde68a" />
-                <Line dataKey="Max frame" stroke="#e11d48" strokeWidth={2} />
+                <Area type="monotone" dataKey="Average frame" stroke="#2d6f55" fill="#dfeec7" />
+                <Area type="monotone" dataKey="P95 frame" stroke="#c18432" fill="#f2d18e" />
+                <Line dataKey="Max frame" stroke="#a64231" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -175,9 +180,9 @@ export function SummaryDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="> 120 Hz budget" fill="#e11d48" radius={[5, 5, 0, 0]} />
-                <Bar dataKey="> 60 Hz budget" fill="#f59e0b" radius={[5, 5, 0, 0]} />
-                <Bar dataKey="Raster > 120 Hz" fill="#7c3aed" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="> 120 Hz budget" fill="#a64231" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="> 60 Hz budget" fill="#c18432" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="Raster > 120 Hz" fill="#6a4f34" radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -196,7 +201,7 @@ export function SummaryDashboard() {
                 <PolarGrid />
                 <PolarAngleAxis dataKey="axis" />
                 <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} />
-                <Radar dataKey="value" stroke="#7c3aed" fill="#7c3aed" fillOpacity={0.28} />
+                <Radar dataKey="value" stroke="#17633d" fill="#17633d" fillOpacity={0.28} />
                 <Tooltip formatter={(value) => [formatNumber(Number(value), 1), "relative score"]} />
               </RadarChart>
             </ResponsiveContainer>
@@ -221,8 +226,8 @@ export function SummaryDashboard() {
                 <YAxis yAxisId="right" orientation="right" unit=" s" />
                 <Tooltip />
                 <Legend />
-                <Bar yAxisId="left" dataKey="Samples" fill="#7c3aed" radius={[5, 5, 0, 0]} />
-                <Bar yAxisId="right" dataKey="Duration (s)" fill="#0891b2" radius={[5, 5, 0, 0]} />
+                <Bar yAxisId="left" dataKey="Samples" fill="#6a4f34" radius={[5, 5, 0, 0]} />
+                <Bar yAxisId="right" dataKey="Duration (s)" fill="#2d6f55" radius={[5, 5, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -288,8 +293,8 @@ export function SummaryDashboard() {
 }
 
 const comparisonRows: Array<{ label: string; read: (scenario: ScenarioProfile) => string }> = [
-  { label: "RSS", read: (scenario) => formatOptional(scenario.metrics.devTools.rssMb, "MB") },
-  { label: "Allocated", read: (scenario) => formatOptional(scenario.metrics.devTools.allocatedMb, "MB") },
+  { label: "RSS", read: (scenario) => formatMemoryValue(scenario, "rss") },
+  { label: "Allocated", read: (scenario) => formatMemoryValue(scenario, "allocated") },
   { label: "Dart heap", read: (scenario) => formatOptional(scenario.metrics.devTools.dartHeapMb, "MB") },
   { label: "Frames captured", read: (scenario) => formatOptional(scenario.metrics.devTools.performanceRecordingFrames, "count") },
   { label: "Average frame", read: (scenario) => formatOptional(scenario.metrics.devTools.averageFrameMs, "ms", 3) },
@@ -304,8 +309,13 @@ const comparisonRows: Array<{ label: string; read: (scenario: ScenarioProfile) =
   { label: "Developer GPU overlay", read: (scenario) => formatOptional(scenario.metrics.devTools.developerGpuPercent, "%") },
 ];
 
-function measuredMetric(value: number | null | undefined, unit: string, source?: string): NumericMetric {
-  return value === null || value === undefined ? { value: null, unit, status: "not-measured" } : { value, unit, status: "measured", source };
+function measuredMetric(
+  value: number | null | undefined,
+  unit: string,
+  source?: string,
+  status: NumericMetric["status"] = "measured",
+): NumericMetric {
+  return value === null || value === undefined ? { value: null, unit, status: "not-measured" } : { value, unit, status, source };
 }
 
 function formatOptional(value: number | null | undefined, unit: string, digits = 1) {
@@ -316,6 +326,21 @@ function formatOptional(value: number | null | undefined, unit: string, digits =
     return formatNumber(value, 0);
   }
   return `${formatNumber(value, digits)} ${unit}`;
+}
+
+function formatMemoryValue(scenario: ScenarioProfile, metric: "rss" | "allocated") {
+  const value = metric === "rss" ? scenario.metrics.devTools.rssMb : scenario.metrics.devTools.allocatedMb;
+  return formatOptional(value, "MB");
+}
+
+function memorySource(scenario: ScenarioProfile, metric: "rss" | "allocated") {
+  if (scenario.order < 3) {
+    return "DevTools Memory";
+  }
+  if (metric === "rss") {
+    return "Derived from comparable DevTools memory evidence";
+  }
+  return "Derived from Dart heap and observed allocated margin";
 }
 
 function clampScore(value: number) {

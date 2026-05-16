@@ -7,6 +7,13 @@ const measured = (value: number, unit: string, source?: string): NumericMetric =
   source,
 });
 
+const estimated = (value: number, unit: string, source?: string): NumericMetric => ({
+  value,
+  unit,
+  status: "estimated",
+  source,
+});
+
 const notMeasured = (unit = ""): NumericMetric => ({
   value: null,
   unit,
@@ -270,7 +277,7 @@ const scenario1: ScenarioProfile = {
       evidence: [
         "Mostly blue/cyan and green regions are visible in the startup screen evidence.",
         "No broad red full-screen overdraw region is visible in the provided screenshot.",
-        "The image was attached in the conversation; save it as public/evidence/scenario-1-overdraw.png if it should render in the dashboard gallery.",
+        "The image was attached in the conversation; save it as public/evidence/scenario-1-overdraw.png if it should render in the evidence gallery.",
       ],
     },
     power: emptyPower,
@@ -480,7 +487,7 @@ const scenario2: ScenarioProfile = {
       evidence: [
         "The overdraw capture shows green bands around repeated rows, tab areas, and bottom navigation.",
         "The visible screen does not show broad red regions, so severe full-screen overdraw is not indicated.",
-        "The overdraw screenshot was attached in the conversation but is not yet available as a local dashboard asset.",
+        "The overdraw screenshot was attached in the conversation but is not yet available as a local report asset.",
       ],
     },
     power: emptyPower,
@@ -644,7 +651,7 @@ const scenario2: ScenarioProfile = {
     limitations: [
       "Only DevTools CSV/JSON/screenshots and developer-mode visual evidence are used.",
       "Numeric Android thread states, native heap, graphics heap, activities, views, and WebViews are not available in the accepted DevTools/developer-mode evidence.",
-      "GPU overlay and overdraw phone screenshots are interpreted from the chat attachments but are not yet saved as local dashboard image assets.",
+      "GPU overlay and overdraw phone screenshots are interpreted from the chat attachments but are not yet saved as local report image assets.",
       "Battery behavior is not available in the accepted data sources.",
     ],
   },
@@ -687,7 +694,10 @@ const scenario3: ScenarioProfile = {
   measurementContext:
     "Scenario 3 is based only on Flutter DevTools exports/screenshots from the local profile build and visual evidence captured directly on the Android device through developer options.",
   metrics: {
-    memory: emptyMemory,
+    memory: {
+      ...emptyMemory,
+      totalRssKb: estimated(mbToKb(397.0), "KB", "Derived from Scenario 2 RSS-to-Dart-heap ratio"),
+    },
     objects: emptyObjects,
     cpu: {
       ...emptyCpu,
@@ -725,7 +735,7 @@ const scenario3: ScenarioProfile = {
       evidence: [
         "The overdraw capture highlights the title field, text rows, and left-side layout region.",
         "The evidence is mostly green rather than red, so it does not indicate severe full-screen overdraw.",
-        "The phone overdraw image was attached in the conversation; save it as public/evidence/scenario-3-overdraw.png if it should render in the dashboard gallery.",
+        "The phone overdraw image was attached in the conversation; save it as public/evidence/scenario-3-overdraw.png if it should render in the evidence gallery.",
       ],
     },
     power: emptyPower,
@@ -742,8 +752,8 @@ const scenario3: ScenarioProfile = {
       cpuSamplePeriodUs: 250,
       cpuStackDepth: 128,
       dartHeapMb: 45.2,
-      rssMb: null,
-      allocatedMb: null,
+      rssMb: 397.0,
+      allocatedMb: 45.4,
       dartFlutterMb: 45.2,
       dartFlutterNativeKb: null,
       rasterLayerBytes: null,
@@ -862,7 +872,7 @@ const scenario3: ScenarioProfile = {
   ],
   interpretation: {
     memory:
-      "The DevTools memory view shows 45.2 MB for All Classes/Dart heap during document editing. This is slightly higher than workspace navigation and includes editor-related objects such as Success parser results, vector points, path offsets, SVG data, protobuf fields, and layout helpers. The heap still appears moderate for an editing scenario.",
+      "The DevTools memory view shows 45.2 MB for All Classes/Dart heap during document editing. RSS is shown as approximately 397.0 MB by applying the Scenario 2 RSS-to-Dart-heap ratio to this scenario's Dart heap, and Allocated is shown as approximately 45.4 MB from the observed heap-to-allocated margin in the scenarios with visible chart values. These values should be read as derived approximations, not direct chart readings. The heap still appears moderate for an editing scenario.",
     cpu:
       "The CPU profiler captured 5454 samples over 34.2 seconds. The call tree is dominated by _drawFrame at 50.29%, followed by microtask processing at 24.81% and raw receive-port handling at 11.00%. This matches an active editing scenario where keyboard input, async events, rendering, and platform messages are continuously involved.",
     threads:
@@ -890,9 +900,9 @@ const scenario3: ScenarioProfile = {
     ],
     limitations: [
       "Only DevTools CSV/JSON/screenshots and developer-mode visual evidence are used.",
-      "RSS and allocated memory are not recorded numerically for this scenario because the provided memory screenshot does not expose exact values.",
+      "RSS and allocated memory are approximate values derived from the Scenario 2 RSS-to-Dart-heap ratio and the observed Dart heap for this scenario.",
       "Numeric Android thread states, native heap, graphics heap, activities, views, and WebViews are not available in the accepted evidence set.",
-      "GPU overlay and overdraw phone screenshots are interpreted from the chat attachments but are not yet saved as local dashboard image assets.",
+      "GPU overlay and overdraw phone screenshots are interpreted from the chat attachments but are not yet saved as local report image assets.",
       "Battery behavior is not available in the accepted data sources.",
     ],
   },
@@ -934,7 +944,10 @@ const scenario4: ScenarioProfile = {
   measurementContext:
     "Scenario 4 is based only on Flutter DevTools exports/screenshots from the local profile build and visual evidence captured directly on the Android device through developer options.",
   metrics: {
-    memory: emptyMemory,
+    memory: {
+      ...emptyMemory,
+      totalRssKb: estimated(mbToKb(381.9), "KB", "Derived from Scenario 2 RSS-to-Dart-heap ratio"),
+    },
     objects: emptyObjects,
     cpu: {
       ...emptyCpu,
@@ -972,7 +985,7 @@ const scenario4: ScenarioProfile = {
       evidence: [
         "The overdraw capture shows strong bands around the tab row and repeated list rows.",
         "The bottom sheet creates an additional layered surface over the existing workspace content.",
-        "The phone overdraw image was attached in the conversation; save it as public/evidence/scenario-4-overdraw.png if it should render in the dashboard gallery.",
+        "The phone overdraw image was attached in the conversation; save it as public/evidence/scenario-4-overdraw.png if it should render in the evidence gallery.",
       ],
     },
     power: emptyPower,
@@ -989,8 +1002,8 @@ const scenario4: ScenarioProfile = {
       cpuSamplePeriodUs: 250,
       cpuStackDepth: 128,
       dartHeapMb: 43.5,
-      rssMb: null,
-      allocatedMb: null,
+      rssMb: 381.9,
+      allocatedMb: 43.7,
       dartFlutterMb: 43.5,
       dartFlutterNativeKb: null,
       rasterLayerBytes: null,
@@ -1108,7 +1121,7 @@ const scenario4: ScenarioProfile = {
   ],
   interpretation: {
     memory:
-      "The DevTools memory evidence shows 43.5 MB for All Classes/Dart Heap during the page creation flow. The top classes are similar to workspace navigation, dominated by typography, icons, SVG widgets, spacing widgets, protobuf metadata, and provider/widget elements. This suggests that opening the creation bottom sheet does not create a large Dart heap increase in the captured window.",
+      "The DevTools memory evidence shows 43.5 MB for All Classes/Dart Heap during the page creation flow. RSS is shown as approximately 381.9 MB because Scenario 4 has the same Dart heap size as Scenario 2, where RSS was visible. Allocated is shown as approximately 43.7 MB from the small heap-to-allocated margin observed in scenarios with visible chart values. These values should be read as derived approximations, not direct chart readings.",
     cpu:
       "The CPU profiler captured 2372 samples over 20.1 seconds. The call tree is dominated by _drawFrame at 51.81%, followed by microtask processing at 19.90% and raw receive-port handling at 6.87%. This is expected for a UI flow that opens a bottom sheet, updates the workspace, and creates a new page.",
     threads:
@@ -1136,9 +1149,9 @@ const scenario4: ScenarioProfile = {
     ],
     limitations: [
       "Only DevTools CSV/JSON/screenshots and developer-mode visual evidence are used.",
-      "RSS and allocated memory are not recorded numerically for this scenario because the provided memory evidence does not expose exact values.",
+      "RSS and allocated memory are approximate values derived from Scenario 2 because Scenario 4 has the same Dart heap size in the accepted memory evidence.",
       "Numeric Android thread states, native heap, graphics heap, activities, views, and WebViews are not available in the accepted evidence set.",
-      "GPU overlay, overdraw, and Memory screenshot images are interpreted from the chat attachments but are not yet saved as local dashboard image assets.",
+      "GPU overlay, overdraw, and Memory screenshot images are interpreted from the chat attachments but are not yet saved as local report image assets.",
       "Battery behavior is not available in the accepted data sources.",
     ],
   },
@@ -1154,4 +1167,4 @@ export const scenarios: ScenarioProfile[] = [
 export const completedScenarios = scenarios.filter((scenario) => scenario.status === "complete");
 
 export const appMeasurementNote =
-  "The dashboard now uses only Flutter DevTools CSV/JSON exports, DevTools screenshots, Flutter Inspector screenshots, and Android developer-mode visual evidence captured directly on the phone. Unavailable metrics are marked as not available.";
+  "This restored report uses only Flutter DevTools CSV/JSON exports, DevTools screenshots, Flutter Inspector screenshots, and Android developer-mode visual evidence captured directly on the phone. Unavailable metrics are marked as not available.";
