@@ -82,17 +82,6 @@ img {
   font-size: 0.84rem;
 }
 
-.brand-mark {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  color: #ffffff;
-  background: #17212f;
-  font-weight: 800;
-}
-
 .nav-list {
   display: grid;
   gap: 7px;
@@ -128,27 +117,6 @@ img {
   border-color: #c8d9f2;
   background: #ffffff;
   box-shadow: 0 8px 22px rgba(42, 78, 122, 0.08);
-}
-
-.sidebar-note {
-  margin-top: auto;
-  border: 1px solid var(--border);
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 14px;
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
-.sidebar-note strong,
-.sidebar-note span {
-  display: block;
-}
-
-.sidebar-note strong {
-  color: var(--ink);
-  margin-bottom: 4px;
 }
 
 .content-area {
@@ -572,28 +540,19 @@ img {
   background: #fbecd3;
 }
 
-.coverage-list {
+.source-stack {
   display: grid;
-  gap: 9px;
-  margin-top: 4px;
-}
-
-.coverage-list > span {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 0.9rem;
+  margin-top: 12px;
 }
 
-.coverage-list .status-pill--complete {
-  background: rgba(167, 243, 208, 0.95);
-}
-
-.coverage-list .status-pill--pending {
-  background: rgba(255, 255, 255, 0.22);
-  color: #ffffff;
+.source-stack span {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.92rem;
 }
 
 .object-grid {
@@ -693,6 +652,10 @@ img {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+.findings-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .finding-column {
@@ -797,10 +760,6 @@ td:first-child {
     grid-template-columns: repeat(4, minmax(170px, 1fr));
     overflow-x: auto;
     padding-bottom: 4px;
-  }
-
-  .sidebar-note {
-    margin-top: 0;
   }
 
   .hero-panel,

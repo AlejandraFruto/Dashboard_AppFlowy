@@ -1,6 +1,6 @@
 import type { NumericMetric } from "../types";
 
-export const notMeasured = "Not measured";
+export const notMeasured = "Not available";
 
 export function kbToMb(value: number): number {
   return value / 1024;

@@ -23,20 +23,12 @@ import { appMeasurementNote, scenarios } from "../data/scenarios";
 import type { NumericMetric, ScenarioProfile } from "../types";
 import { formatNumber } from "../utils/format";
 import { MetricCard } from "./MetricCard";
-import { StatusPill } from "./StatusPill";
 
 const chartColors = ["#2563eb", "#0891b2", "#16a34a", "#f59e0b", "#e11d48", "#7c3aed", "#475569"];
 
 export function SummaryDashboard() {
   const complete = scenarios.filter((scenario) => scenario.status === "complete");
   const latest = complete[complete.length - 1];
-
-  const scenarioProgress = scenarios.map((scenario) => ({
-    name: `S${scenario.order}`,
-    title: scenario.shortTitle,
-    measured: scenario.status === "complete" ? 100 : 0,
-    pending: scenario.status === "complete" ? 0 : 100,
-  }));
 
   const memoryChartData = scenarios.map((scenario) => ({
     name: `S${scenario.order}`,
@@ -86,9 +78,9 @@ export function SummaryDashboard() {
           <p>{appMeasurementNote}</p>
         </div>
         <div className="hero-scorecard">
-          <span>Current coverage</span>
-          <strong>{complete.length}/{scenarios.length}</strong>
-          <small>Scenarios measured with DevTools/developer mode</small>
+          <span>Evidence stack</span>
+          <strong>{scenarios.length}</strong>
+          <small>Scenarios built from DevTools exports and phone screenshots</small>
         </div>
       </section>
 
@@ -130,27 +122,16 @@ export function SummaryDashboard() {
         <article className="panel panel--blue">
           <div className="section-heading">
             <div>
-              <p className="eyebrow eyebrow--light">Coverage</p>
-              <h2>Scenario readiness</h2>
+              <p className="eyebrow eyebrow--light">Evidence</p>
+              <h2>Accepted data sources</h2>
             </div>
           </div>
-          <div className="chart-frame chart-frame--compact">
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={scenarioProgress} layout="vertical" margin={{ left: 18 }}>
-                <XAxis type="number" hide domain={[0, 100]} />
-                <YAxis dataKey="name" type="category" width={38} />
-                <Tooltip formatter={(value) => [`${value}%`, ""]} />
-                <Bar dataKey="measured" stackId="a" fill="#a7f3d0" radius={[8, 0, 0, 8]} />
-                <Bar dataKey="pending" stackId="a" fill="rgba(255,255,255,0.28)" radius={[0, 8, 8, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="coverage-list">
-            {scenarios.map((scenario) => (
-              <span key={scenario.id}>
-                S{scenario.order} {scenario.shortTitle} <StatusPill status={scenario.status} />
-              </span>
-            ))}
+          <div className="source-stack">
+            <span>Flutter DevTools JSON exports</span>
+            <span>Flutter DevTools CSV snapshots</span>
+            <span>Performance, memory, and CPU profiler screenshots</span>
+            <span>Flutter Inspector screenshots</span>
+            <span>Android developer-mode GPU and overdraw captures</span>
           </div>
         </article>
       </section>
@@ -285,7 +266,6 @@ export function SummaryDashboard() {
                 {scenarios.map((scenario) => (
                   <th key={scenario.id}>
                     <span>{scenario.shortTitle}</span>
-                    <StatusPill status={scenario.status} />
                   </th>
                 ))}
               </tr>
@@ -330,7 +310,7 @@ function measuredMetric(value: number | null | undefined, unit: string, source?:
 
 function formatOptional(value: number | null | undefined, unit: string, digits = 1) {
   if (value === null || value === undefined) {
-    return "Not measured";
+    return "Not available";
   }
   if (unit === "count") {
     return formatNumber(value, 0);

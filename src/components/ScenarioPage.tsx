@@ -18,7 +18,6 @@ import {
 import type { EvidenceAsset, NumericMetric, ScenarioProfile } from "../types";
 import { formatMetric, formatNumber } from "../utils/format";
 import { MetricCard } from "./MetricCard";
-import { StatusPill } from "./StatusPill";
 
 interface ScenarioPageProps {
   scenario: ScenarioProfile;
@@ -81,7 +80,6 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
         <div>
           <div className="scenario-header__title">
             <p className="eyebrow">Scenario {scenario.order}</p>
-            <StatusPill status={scenario.status} />
           </div>
           <h1>{scenario.title}</h1>
           <p>{scenario.description}</p>
@@ -123,7 +121,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
           ))}
         </div>
         <div className="source-list">
-          {scenario.sourceFiles.length ? scenario.sourceFiles.map((file) => <code key={file}>{file}</code>) : <span>Not measured</span>}
+          {scenario.sourceFiles.length ? scenario.sourceFiles.map((file) => <code key={file}>{file}</code>) : <span>Not available</span>}
         </div>
       </section>
 
@@ -365,7 +363,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
               <h2>Developer-option evidence</h2>
             </div>
             <span className={`status-pill status-pill--${metrics.overdraw.status === "measured" ? "complete" : "pending"}`}>
-              {metrics.overdraw.status === "measured" ? "Measured" : "Not measured"}
+              {metrics.overdraw.status === "measured" ? "Evidence available" : "Pending evidence"}
             </span>
           </div>
           <p className="interpretation">{scenario.interpretation.overdraw}</p>
@@ -395,13 +393,12 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
         <div className="section-heading">
           <div>
             <p className="eyebrow">Findings</p>
-            <h2>Strengths, weaknesses, limitations</h2>
+            <h2>Strengths and weaknesses</h2>
           </div>
         </div>
-        <div className="findings-grid">
+        <div className="findings-grid findings-grid--two">
           <FindingColumn title="Strengths" items={scenario.findings.strengths} />
           <FindingColumn title="Weaknesses" items={scenario.findings.weaknesses} />
-          <FindingColumn title="Limitations" items={scenario.findings.limitations} />
         </div>
       </section>
     </main>
@@ -437,7 +434,7 @@ function FindingColumn({ title, items }: { title: string; items: string[] }) {
 }
 
 function EmptyChart() {
-  return <div className="empty-state">Not measured with the current DevTools/developer-mode evidence.</div>;
+  return <div className="empty-state">Not available in the current DevTools/developer-mode evidence.</div>;
 }
 
 function EmptyEvidence() {
@@ -450,7 +447,7 @@ function simpleMetric(value: number | null | undefined, unit: string, source?: s
 
 function formatOptional(value: number | null | undefined, unit: string, digits = 1) {
   if (value === null || value === undefined) {
-    return "Not measured";
+    return "Not available";
   }
   if (unit === "count") {
     return formatNumber(value, 0);
