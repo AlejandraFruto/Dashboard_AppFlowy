@@ -241,6 +241,7 @@ img {
 .nav-list button small {
   color: rgba(255, 232, 190, 0.64);
   font-size: 0.78rem;
+  white-space: nowrap;
 }
 
 .nav-list button:hover,
