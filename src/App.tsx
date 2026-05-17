@@ -2,6 +2,12 @@ import { useMemo, useState } from "react";
 import { scenarios } from "./data/scenarios";
 import { ScenarioPage } from "./components/ScenarioPage";
 import { SummaryDashboard } from "./components/SummaryDashboard";
+import {
+  GarbageCollectionDashboard,
+  MemoryManagementDashboard,
+  OptimizationDashboard,
+  ThreadingDashboard,
+} from "./components/DeepAnalysisDashboard";
 
 export default function App() {
   const [selectedId, setSelectedId] = useState("summary");
@@ -39,6 +45,22 @@ export default function App() {
               <small>Scenario {scenario.order}</small>
             </button>
           ))}
+          <button className={selectedId === "memory-management" ? "active" : ""} onClick={() => setSelectedId("memory-management")}>
+            <span>Memory Mgmt</span>
+            <small>Leaks & RAM</small>
+          </button>
+          <button className={selectedId === "gc-allocations" ? "active" : ""} onClick={() => setSelectedId("gc-allocations")}>
+            <span>GC & Allocations</span>
+            <small>14.3.4</small>
+          </button>
+          <button className={selectedId === "threading-analysis" ? "active" : ""} onClick={() => setSelectedId("threading-analysis")}>
+            <span>Threading</span>
+            <small>14.3.5</small>
+          </button>
+          <button className={selectedId === "optimization-analysis" ? "active" : ""} onClick={() => setSelectedId("optimization-analysis")}>
+            <span>Optimizations</span>
+            <small>15.x</small>
+          </button>
         </nav>
       </aside>
 
@@ -53,10 +75,26 @@ export default function App() {
             <span>DevTools + developer mode</span>
           </div>
         </header>
-        {selectedScenario ? <ScenarioPage scenario={selectedScenario} /> : <SummaryDashboard />}
+        {renderSelectedContent(selectedId, selectedScenario)}
       </div>
     </div>
   );
+}
+
+function renderSelectedContent(selectedId: string, selectedScenario: ReturnType<typeof scenarios.find>) {
+  if (selectedId === "memory-management") {
+    return <MemoryManagementDashboard />;
+  }
+  if (selectedId === "gc-allocations") {
+    return <GarbageCollectionDashboard />;
+  }
+  if (selectedId === "threading-analysis") {
+    return <ThreadingDashboard />;
+  }
+  if (selectedId === "optimization-analysis") {
+    return <OptimizationDashboard />;
+  }
+  return selectedScenario ? <ScenarioPage scenario={selectedScenario} /> : <SummaryDashboard />;
 }
 
 function RealmGate({ onEnter }: { onEnter: () => void }) {
