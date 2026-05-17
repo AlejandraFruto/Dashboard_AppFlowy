@@ -392,7 +392,8 @@ const scenario1: ScenarioProfile = {
     {
       title: "GPU Overdraw",
       kind: "overdraw",
-      caption: "Image asset pending. Save the overdraw screenshot as public/evidence/scenario-1-overdraw.png to render it here.",
+      src: "/evidence/scenario-1-overdraw.jpeg",
+      caption: "Android developer-mode overdraw capture for the startup workspace.",
     },
   ],
   interpretation: {
@@ -401,7 +402,7 @@ const scenario1: ScenarioProfile = {
     cpu:
       "The short CPU profiler capture contains 42 samples over 515.4 ms. The hottest entries are DevTools service-extension, microtask, JSON, and socket profiling paths, which means the sample is useful for confirming profiler activity but limited for deep startup attribution.",
     threads:
-      "Threading is interpreted from DevTools timelines rather than Android top -H. The visible execution is centered on the Flutter UI/raster pipeline and DevTools service-extension work; numeric running/sleeping/stopped/zombie counts are not available in the accepted data sources.",
+      "Threading is interpreted from DevTools timelines rather than Android top -H. The visible execution is centered on the Flutter UI/raster pipeline and DevTools service-extension work; numeric running/sleeping/stopped/zombie counts are not available in the data sources.",
     gpu:
       "The two captured Flutter frames are both above the 8.33 ms frame budget of a 120 Hz device, but below the 16.67 ms 60 Hz budget. Raster time is the key pressure point, with a maximum of 9.843 ms.",
     overdraw:
@@ -425,7 +426,7 @@ const scenario1: ScenarioProfile = {
     limitations: [
       "Only DevTools and developer-mode evidence are included.",
       "The Performance JSON contains only two Flutter frames.",
-      "Numeric Android thread states and power consumption are not available from the accepted sources.",
+      "Numeric Android thread states are not available from the current data sources.",
     ],
   },
 };
@@ -648,17 +649,20 @@ const scenario2: ScenarioProfile = {
     {
       title: "DevTools Performance Timeline",
       kind: "performance",
-      caption: "Image asset pending. The JSON export is already structured; save the screenshot as public/evidence/scenario-2-devtools-performance.png to render it here.",
+      src: "/evidence/scenario-2-devtools-performance.png",
+      caption: "Flutter DevTools Performance timeline for workspace navigation.",
     },
     {
       title: "Developer GPU Overlay",
       kind: "gpu",
-      caption: "Image asset pending. The attached phone screenshot showed Curr Avg 77 FPS, CPU 24%, and GPU 0.1%.",
+      src: "/evidence/scenario-2-gpu-overlay.png",
+      caption: "Phone developer-mode GPU overlay showing Curr Avg 77 FPS, CPU 24%, and GPU 0.1%.",
     },
     {
       title: "GPU Overdraw",
       kind: "overdraw",
-      caption: "Image asset pending. Save the phone overdraw screenshot as public/evidence/scenario-2-overdraw.png to render it here.",
+      src: "/evidence/scenario-2-overdraw.png",
+      caption: "Android developer-mode overdraw capture for the Recent workspace list.",
     },
   ],
   interpretation: {
@@ -924,12 +928,14 @@ const scenario3: ScenarioProfile = {
     {
       title: "Developer GPU Overlay",
       kind: "gpu",
-      caption: "Image asset pending. The attached phone screenshot showed Curr Avg 46 FPS, CPU 87%, and GPU 0.6%.",
+      src: "/evidence/scenario-3-gpu-overlay.png",
+      caption: "Phone developer-mode GPU overlay showing Curr Avg 46 FPS, CPU 87%, and GPU 0.6%.",
     },
     {
       title: "GPU Overdraw",
       kind: "overdraw",
-      caption: "Image asset pending. Save the phone overdraw screenshot as public/evidence/scenario-3-overdraw.png to render it here.",
+      src: "/evidence/scenario-3-overdraw.png",
+      caption: "Android developer-mode overdraw capture for the document editing view.",
     },
   ],
   interpretation: {
@@ -1166,7 +1172,7 @@ const scenario4: ScenarioProfile = {
     {
       title: "DevTools Memory",
       kind: "memory",
-      caption: "Image asset pending. The Memory CSV and screenshot evidence show 43.5 MB in All Classes/Dart Heap.",
+      caption: "The Memory CSV and screenshot evidence show 43.5 MB in All Classes/Dart Heap.",
     },
     {
       title: "CPU Flame Chart",
@@ -1195,12 +1201,14 @@ const scenario4: ScenarioProfile = {
     {
       title: "Developer GPU Overlay",
       kind: "gpu",
-      caption: "Image asset pending. The attached phone screenshot showed Curr Avg 1 FPS, CPU 26%, and GPU 1.3% while the bottom sheet was open.",
+      src: "/evidence/scenario-4-gpu-overlay.png",
+      caption: "Phone developer-mode GPU overlay showing Curr Avg 1 FPS, CPU 26%, and GPU 1.3% while the bottom sheet was open.",
     },
     {
       title: "GPU Overdraw",
       kind: "overdraw",
-      caption: "Image asset pending. Save the phone overdraw screenshot as public/evidence/scenario-4-overdraw.png to render it here.",
+      src: "/evidence/scenario-4-overdraw.png",
+      caption: "Android developer-mode overdraw capture for the page creation bottom-sheet flow.",
     },
   ],
   interpretation: {

@@ -27,6 +27,7 @@ const colors = ["#2d6f55", "#c18432", "#17633d", "#8f6f3f", "#a64231", "#6a4f34"
 
 export function ScenarioPage({ scenario }: ScenarioPageProps) {
   const { metrics } = scenario;
+  const visibleEvidence = scenario.evidence.filter((asset) => asset.src);
 
   const devToolsFrameData = metrics.devTools.frames.map((frame) => ({
     frame: `F${frame.frame}`,
@@ -122,23 +123,6 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
         <MetricCard label="Avg frame" metric={simpleMetric(metrics.devTools.averageFrameMs, "ms", "DevTools Performance")} tone="amber" />
         <MetricCard label="CPU samples" metric={simpleMetric(metrics.devTools.cpuSampleCount, "count", "DevTools CPU Profiler")} tone="purple" />
         <MetricCard label="Developer FPS" metric={simpleMetric(metrics.devTools.developerFpsAverage, "FPS", "Phone developer mode")} tone="red" />
-      </section>
-
-      <section className="panel">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Inputs</p>
-            <h2>Tools and source files</h2>
-          </div>
-        </div>
-        <div className="tag-list">
-          {scenario.tools.map((tool) => (
-            <span key={tool}>{tool}</span>
-          ))}
-        </div>
-        <div className="source-list">
-          {scenario.sourceFiles.length ? scenario.sourceFiles.map((file) => <code key={file}>{file}</code>) : <span>Not available</span>}
-        </div>
       </section>
 
       <section className="section-grid">
@@ -454,7 +438,7 @@ export function ScenarioPage({ scenario }: ScenarioPageProps) {
           </div>
         </div>
         <div className="evidence-grid">
-          {scenario.evidence.length ? scenario.evidence.map((asset) => <EvidenceCard key={asset.title} asset={asset} />) : <EmptyEvidence />}
+          {visibleEvidence.length ? visibleEvidence.map((asset) => <EvidenceCard key={asset.title} asset={asset} />) : <EmptyEvidence />}
         </div>
       </section>
 
@@ -478,7 +462,7 @@ function EvidenceCard({ asset }: { asset: EvidenceAsset }) {
   return (
     <article className="evidence-card">
       <div className="evidence-card__image">
-        {asset.src ? <img src={asset.src} alt={asset.title} /> : <div className="missing-evidence">Image asset pending</div>}
+        {asset.src ? <img src={asset.src} alt={asset.title} /> : null}
       </div>
       <div>
         <span>{asset.kind}</span>

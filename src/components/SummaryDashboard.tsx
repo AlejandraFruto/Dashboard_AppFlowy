@@ -128,7 +128,7 @@ export function SummaryDashboard() {
           <div className="section-heading">
             <div>
               <p className="eyebrow eyebrow--light">Evidence</p>
-              <h2>Accepted data sources</h2>
+              <h2>Data sources</h2>
             </div>
           </div>
           <div className="source-stack">
